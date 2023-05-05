@@ -2,14 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Superliminal : MonoBehaviour
+public class ForcedPerspective : MonoBehaviour
 {
     public Transform target;
-
     public LayerMask targetMask;
     public LayerMask ignoreTargetMask;
-    public float offsetFactor = 1;
-
+    public float offsetFactor;
+    
     float originalDistance;
     float originalScale;
     Vector3 targetScale;
@@ -23,7 +22,6 @@ public class Superliminal : MonoBehaviour
         HandleInput();
         ResizeTarget();
     }
-
     void HandleInput(){
         if(Input.GetMouseButtonDown(0)){
             if(target == null){
@@ -49,13 +47,13 @@ public class Superliminal : MonoBehaviour
 
         RaycastHit hit;
         if(Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, ignoreTargetMask)){
-            target.position = hit.point - transform.forward * offsetFactor * (targetScale.x + 1);
+            target.position = hit.point - transform.forward * offsetFactor * targetScale.x;
 
             float currentDistance = Vector3.Distance(transform.position, target.position);
             float s = currentDistance / originalDistance;
             targetScale.x = targetScale.y = targetScale.z = s;
 
-            target.transform.localScale = targetScale * originalScale;
+            target.transform.localScale = targetScale * originalScale; 
         }
     }
 }
