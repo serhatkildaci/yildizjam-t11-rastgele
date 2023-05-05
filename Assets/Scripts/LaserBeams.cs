@@ -49,6 +49,9 @@ public class LaserBeams
         }
     }
     void Checkhit(RaycastHit hitInfo, Vector3 direction, LineRenderer laser){
-
+        if(hitInfo.collider.gameObject.tag == "Mirror"){
+            Vector3 pos = hitInfo.point;
+            Vector3 dir = Vector3.Reflect(direction, hitInfo.normal);
+        }
     }
 }
