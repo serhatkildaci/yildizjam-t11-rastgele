@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4459864850019384737}
   - component: {fileID: 4459864850019384741}
   - component: {fileID: 4459864850019384740}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FirstPersonController
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -389,9 +389,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4459864851310106429}
   - component: {fileID: 4459864851310106426}
-  - component: {fileID: 6212086970529038868}
-  - component: {fileID: 691356825373529567}
   - component: {fileID: 4459864851310106427}
+  - component: {fileID: 7515308257887962387}
   m_Layer: 0
   m_Name: PlayerCamera
   m_TagString: MainCamera
@@ -458,46 +457,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &6212086970529038868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4459864851310106424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82b93eda17011d647b7ed7e270e4a113, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectDistance: 5
-  objectLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  minY: -10
-  minObjectDistance: 1
---- !u!114 &691356825373529567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4459864851310106424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bea02aba46428f3438ebd98660a083d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 0
-  ignoreTargetMask:
-    serializedVersion: 2
-    m_Bits: 0
-  offsetFactor: 0
-  objectDistance: 5
-  minObjectDistance: 1
 --- !u!81 &4459864851310106427
 AudioListener:
   m_ObjectHideFlags: 0
@@ -506,6 +465,26 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4459864851310106424}
   m_Enabled: 1
+--- !u!114 &7515308257887962387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4459864851310106424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f34c88d3ff967b488c2a886b74f2539, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 64
+  ignoreTargetMask:
+    serializedVersion: 2
+    m_Bits: 55
+  offsetFactor: 1
 --- !u!1 &4459864851397454630
 GameObject:
   m_ObjectHideFlags: 0
