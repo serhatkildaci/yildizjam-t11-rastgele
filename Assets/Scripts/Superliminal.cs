@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ForcedPerspective : MonoBehaviour
+public class Superliminal : MonoBehaviour
 {
     public Transform target;
+
     public LayerMask targetMask;
     public LayerMask ignoreTargetMask;
-    public float offsetFactor;
-    
+    public float offsetFactor = 1;
+
     float originalDistance;
     float originalScale;
     Vector3 targetScale;
@@ -22,6 +23,7 @@ public class ForcedPerspective : MonoBehaviour
         HandleInput();
         ResizeTarget();
     }
+
     void HandleInput(){
         if(Input.GetMouseButtonDown(0)){
             if(target == null){
@@ -53,7 +55,7 @@ public class ForcedPerspective : MonoBehaviour
             float s = currentDistance / originalDistance;
             targetScale.x = targetScale.y = targetScale.z = s;
 
-            target.transform.localScale = targetScale * originalScale; 
+            target.transform.localScale = targetScale * originalScale;
         }
     }
 }
