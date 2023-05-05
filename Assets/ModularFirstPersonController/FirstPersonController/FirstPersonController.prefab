@@ -390,6 +390,7 @@ GameObject:
   - component: {fileID: 4459864851310106429}
   - component: {fileID: 4459864851310106426}
   - component: {fileID: 6212086970529038868}
+  - component: {fileID: 691356825373529567}
   - component: {fileID: 4459864851310106427}
   m_Layer: 0
   m_Name: PlayerCamera
@@ -469,6 +470,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82b93eda17011d647b7ed7e270e4a113, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectDistance: 5
+  objectLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  minY: -10
+  minObjectDistance: 1
+--- !u!114 &691356825373529567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4459864851310106424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bea02aba46428f3438ebd98660a083d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  ignoreTargetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  offsetFactor: 0
+  objectDistance: 5
+  minObjectDistance: 1
 --- !u!81 &4459864851310106427
 AudioListener:
   m_ObjectHideFlags: 0
