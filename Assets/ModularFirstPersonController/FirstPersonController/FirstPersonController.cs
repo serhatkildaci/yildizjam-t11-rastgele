@@ -19,7 +19,8 @@ public class FirstPersonController : MonoBehaviour
     private Rigidbody rb;
 
     #region Camera Movement Variables
-
+[SerializeField] private LayerMask grabbableLayer;
+private GameObject grabbedObject;
     public Camera playerCamera;
 
     public float fov = 60f;
@@ -202,6 +203,34 @@ public class FirstPersonController : MonoBehaviour
 
     private void Update()
     {
+    #region CROSSHAIR
+         if (Input.GetMouseButtonDown(0))
+    {
+        // Raycast to see if there is an object in front of the crosshair
+        RaycastHit hit;
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 10f, grabbableLayer))
+        {
+            // Set the grabbed object and disable its physics
+            grabbedObject = hit.collider.gameObject;
+            grabbedObject.GetComponent<Rigidbody>().isKinematic = true;
+        }
+    }
+    else if (Input.GetMouseButtonUp(0))
+    {
+        // Release the grabbed object and enable its physics
+        if (grabbedObject != null)
+        {
+            grabbedObject.GetComponent<Rigidbody>().isKinematic = false;
+            grabbedObject = null;
+        }
+    }
+
+    // Move the grabbed object along with the crosshair
+    if (grabbedObject != null)
+    {
+        grabbedObject.transform.position = crosshairObject.transform.position;
+    }
+#endregion
         #region Camera
 
         // Control camera movement
