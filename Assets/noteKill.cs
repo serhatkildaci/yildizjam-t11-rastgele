@@ -9,7 +9,7 @@ public class noteKill : MonoBehaviour
     public float soundDelay = 1.0f; // delay before playing sound
     public GameObject blockToDelete; // block to delete on trigger
     public float deleteDelay = 2.0f; // delay before deleting block
-
+    public GameObject noteToDelete;
     private bool triggered = false; // flag to prevent multiple triggers
     private float triggerTime = 0.0f; // time of trigger
 
@@ -17,6 +17,12 @@ public class noteKill : MonoBehaviour
     {
         if (!triggered && other.CompareTag("Player"))
         {
+            MeshRenderer meshRenderer = noteToDelete.GetComponent<MeshRenderer>();
+    MeshFilter meshFilter = noteToDelete.GetComponent<MeshFilter>();
+    Destroy(meshRenderer);
+    Destroy(meshFilter);
+
+
             triggered = true;
             triggerTime = Time.time;
         }
@@ -24,7 +30,7 @@ public class noteKill : MonoBehaviour
 
     private void Update()
     {
-        if (triggered && Time.time >= triggerTime + 5.0f)
+        if (triggered && Time.time >= triggerTime + 3.0f)
         {
             triggered = false;
 
@@ -67,4 +73,6 @@ public class noteKill : MonoBehaviour
     {
         Destroy(blockToDelete);
     }
+
+ 
 }
