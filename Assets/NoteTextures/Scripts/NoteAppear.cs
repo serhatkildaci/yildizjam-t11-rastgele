@@ -1,15 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class NoteAppear : MonoBehaviour
 {
     [SerializeField]
-    public Image _noteImage;
+    private Image _noteImage;
 
-    void OntriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
@@ -17,12 +17,11 @@ public class NoteAppear : MonoBehaviour
         }
     }
 
-    void OntriggerExit(Collider other)
+    void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             _noteImage.enabled = false;
         }
     }
-
 }
