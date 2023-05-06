@@ -32,6 +32,7 @@ public class LaserBeams
         RaycastHit hit;
 
         if(Physics.Raycast(ray, out hit, 30, 1)){
+            Checkhit(hit, dir, laser);
         }
         else{
             laserIndicies.Add(ray.GetPoint(30));
@@ -52,6 +53,17 @@ public class LaserBeams
         if(hitInfo.collider.gameObject.tag == "Mirror"){
             Vector3 pos = hitInfo.point;
             Vector3 dir = Vector3.Reflect(direction, hitInfo.normal);
+
+            CastRay(pos, dir, laser);
+        }
+        else if(hitInfo.collider.gameObject.tag == "LaserGoal"){
+            Debug.Log("Hedefe ulaştın!");
+            laserIndicies.Add(hitInfo.point);
+            UpdateLaser();
+        }
+        else{
+            laserIndicies.Add(hitInfo.point);
+            UpdateLaser();
         }
     }
 }
