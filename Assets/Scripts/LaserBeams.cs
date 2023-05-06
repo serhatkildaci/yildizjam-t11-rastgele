@@ -76,4 +76,7 @@ public class LaserBeams
         UpdateLaser();
     }
     }
+    public void Destroy(){
+        GameObject.Destroy(laserObj);
+    }
 }
