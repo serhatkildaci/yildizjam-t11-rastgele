@@ -4,23 +4,42 @@ using UnityEngine;
 
 public class GrabFromImage : MonoBehaviour
 {
+    
     public GameObject obje;
     public GameObject[] destroy;
     public GameObject player;
     Vector3 playerPos;
     Vector3 playerDirection;
-    float spawnDistance = 10;
+    public float spawnDistance = 10;
     private Camera mainCamera;
 
     private void Awake()
     {
         mainCamera = Camera.main;
     }
+private bool playerInsideCollider = false;
 
-    void OnTriggerEnter(Collider other)
+private void OnTriggerEnter(Collider other)
+{
+    if (other.CompareTag("Player"))
     {
-        if (other.gameObject.CompareTag("Player") && Input.GetKey(KeyCode.Mouse0))
-        {
+        playerInsideCollider = true;
+    }
+}
+
+private void OnTriggerExit(Collider other)
+{
+    if (other.CompareTag("Player"))
+    {
+        playerInsideCollider = false;
+    }
+}
+
+private void Update()
+{
+    if (playerInsideCollider && Input.GetMouseButtonDown(0))
+    {
+        Debug.Log("Mouse click");
             playerPos = player.transform.position + player.transform.forward * spawnDistance;
 
             Instantiate(obje, playerPos, Quaternion.identity);
@@ -28,7 +47,9 @@ public class GrabFromImage : MonoBehaviour
             {
                 Destroy(destroy[i]);
             }
-        }
     }
+}
+
+    
 }
 
