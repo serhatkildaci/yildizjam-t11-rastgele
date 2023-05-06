@@ -12,36 +12,39 @@ public class HoldAndMoveObjects : MonoBehaviour
 
     void Update()
     {
-        objectDistance += Input.mouseScrollDelta.y;
+        
 
-        if (objectDistance < minObjectDistance)
-        {
-            objectDistance = minObjectDistance;
-        }
+        if (Input.GetKeyDown(KeyCode.E))
+{
+    RaycastHit hit;
+    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    if (Physics.Raycast(ray, out hit, Mathf.Infinity, objectLayer))
+    {
+        heldObject = hit.collider.gameObject;
+        heldObjectOffset = heldObject.transform.position - hit.point;
+    }
+}
 
-        if (Input.GetKey(KeyCode.E))
-        {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, objectLayer))
-            {
-                heldObject = hit.collider.gameObject;
-                heldObjectOffset = heldObject.transform.position - hit.point;
-            }
-        }
+if (Input.GetKey(KeyCode.E) && heldObject != null)
+{
+    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    Vector3 newPosition = ray.origin + ray.direction * objectDistance + heldObjectOffset;
+    newPosition.y = Mathf.Max(newPosition.y, minY); // prevent object from moving below minY
+    heldObject.transform.position = newPosition;
+}
 
-        if (Input.GetKey(KeyCode.E) && heldObject != null)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Vector3 newPosition = ray.origin + ray.direction * objectDistance + heldObjectOffset;
-            newPosition.y = Mathf.Max(newPosition.y, minY); // prevent object from moving below minY
-            heldObject.transform.position = newPosition;
-        }
+if (Input.GetKeyUp(KeyCode.E))
+{
+    heldObject = null;
+}
+float rotateSpeed = 5.0f; // adjust as needed
+float rotationAmount = Input.mouseScrollDelta.y * rotateSpeed;
 
-        if (Input.GetMouseButtonUp(0))
-        {
-            heldObject = null;
-        }
+if (heldObject != null)
+{
+    Vector3 currentRotation = heldObject.transform.rotation.eulerAngles;
+    heldObject.transform.rotation = Quaternion.Euler(0.0f, currentRotation.y + rotationAmount, 0.0f);
+}
     
     }
 }

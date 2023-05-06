@@ -12,11 +12,11 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - grabbableLayer
+  - Grabbable
   - Water
   - UI
-  - 
-  - 
+  - Targetable
+  - Player
   - 
   - 
   - 
