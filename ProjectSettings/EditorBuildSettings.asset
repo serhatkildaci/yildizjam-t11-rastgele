@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Serhat.unity
+    guid: af2701098243cf048b482a2b6151a28b
+  - enabled: 1
+    path: Assets/NewScene123.unity
+    guid: 50d8573818892164ea9dfcfd15ae78e4
   m_configObjects: {}

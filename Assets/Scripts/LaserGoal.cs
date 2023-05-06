@@ -3,32 +3,20 @@ using UnityEngine;
 public class LaserGoal : MonoBehaviour
 {
     public GameObject doorToBeOpened;
+    public GameObject player;  // reference to the player's game object
     public bool trigger = false;
-    public float doorOpenDistance = 100f; // adjust this value to control the distance the door opens
-
-    private bool doorIsOpen = false;
-    private Vector3 doorInitialPosition;
+  
 
     void Start()
     {
-        doorInitialPosition = doorToBeOpened.transform.position;
         InvokeRepeating("TriggerChange", 0, 2f);
     }
 
     void Update()
     {
-        if (trigger && !doorIsOpen)
+        if (trigger)
         {
-            float newY = doorInitialPosition.y + doorOpenDistance;
-            doorToBeOpened.transform.position = new Vector3(doorToBeOpened.transform.position.x, Mathf.Lerp(doorInitialPosition.y, newY, 0.01f), doorToBeOpened.transform.position.z);
-            if (doorToBeOpened.transform.position.y >= newY)
-            {
-                doorIsOpen = true;
-            }
-        }
-        else{
-            doorToBeOpened.transform.position = new Vector3(doorToBeOpened.transform.position.x, Mathf.Lerp(transform.position.y, doorInitialPosition.y, 0.01f), doorToBeOpened.transform.position.z);
-            doorIsOpen = false;
+            player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y-1f, player.transform.position.z); // teleport the player -10 units along the y-axis
         }
     }
 
@@ -38,8 +26,7 @@ public class LaserGoal : MonoBehaviour
 
     void OnCollusionEnter(Collider collider){
         if(collider.gameObject.tag == "LaserBeam"){
-            Debug.Log("a");
+            trigger = true;
         }
     }
-
 }

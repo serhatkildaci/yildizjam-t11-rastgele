@@ -62,9 +62,8 @@ public class Superliminal : MonoBehaviour
         }
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, ignoreTargetMask))
-        {
-            target.position = hit.point - transform.forward * offsetFactor * (targetScale.x + 1);
+        if(Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, ignoreTargetMask)){
+            target.position = hit.point - transform.forward * offsetFactor * (targetScale.x);
 
             float currentDistance = Vector3.Distance(transform.position, target.position);
             float s = currentDistance / originalDistance;
