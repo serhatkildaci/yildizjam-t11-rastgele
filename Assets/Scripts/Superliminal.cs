@@ -16,37 +16,48 @@ public class Superliminal : MonoBehaviour
     float originalScale;
     Vector3 targetScale;
 
-    void Start(){
+    void Start()
+    {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void Update(){
+    void Update()
+    {
         HandleInput();
         ResizeTarget();
     }
 
-    void HandleInput(){
-        if(Input.GetMouseButtonDown(0)){
-            if(target == null){
+    void HandleInput()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (target == null)
+            {
+
                 RaycastHit hit;
-                if(Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, targetMask)){
+                if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, targetMask))
+                {
                     target = hit.transform;
                     target.GetComponent<Rigidbody>().isKinematic = true;
                     originalDistance = Vector3.Distance(transform.position, target.position);
                     originalScale = target.localScale.x;
                     targetScale = target.localScale;
+                    AudioManager.instance.Play("Grab");
                 }
             }
-            else{
+            else
+            {
                 target.GetComponent<Rigidbody>().isKinematic = false;
                 target = null;
             }
         }
     }
 
-    void ResizeTarget(){
-        if(target == null){
+    void ResizeTarget()
+    {
+        if (target == null)
+        {
             return;
         }
 
