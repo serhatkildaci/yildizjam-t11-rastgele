@@ -10,6 +10,8 @@ public class Superliminal : MonoBehaviour
     public LayerMask ignoreTargetMask;
     public float offsetFactor = 1;
 
+    public float maxScale = 10f; // new field to control max scale
+
     float originalDistance;
     float originalScale;
     Vector3 targetScale;
@@ -42,6 +44,7 @@ public class Superliminal : MonoBehaviour
             }
         }
     }
+
     void ResizeTarget(){
         if(target == null){
             return;
@@ -53,6 +56,7 @@ public class Superliminal : MonoBehaviour
 
             float currentDistance = Vector3.Distance(transform.position, target.position);
             float s = currentDistance / originalDistance;
+            s = Mathf.Min(s, maxScale / originalScale); // limit scale to maxScale
             targetScale.x = targetScale.y = targetScale.z = s;
 
             target.transform.localScale = targetScale * originalScale;
