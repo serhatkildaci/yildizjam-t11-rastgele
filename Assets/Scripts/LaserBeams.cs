@@ -20,8 +20,8 @@ public class LaserBeams
         this.laser.endWidth = 0.1f;
         this.laser.material = material;
 
-        this.laser.startColor = Color.green;
-        this.laser.endColor = Color.green;
+        this.laser.startColor = Color.red;
+        this.laser.endColor = Color.red;
 
         CastRay(pos, dir, laser);
     }
