@@ -3,11 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
+<<<<<<< HEAD
+  tags: []
+=======
   tags:
   - LaserGoal
   - Mirror
   - Note
   - Targetable
+>>>>>>> 802348527d820799354906b2870cd451cadca8bb
   layers:
   - Default
   - TransparentFX
@@ -15,9 +19,15 @@ TagManager:
   - Grabbable
   - Water
   - UI
+<<<<<<< HEAD
+  - 
+  - 
+  - 
+=======
   - Targetable
   - Player
   - Floor
+>>>>>>> 802348527d820799354906b2870cd451cadca8bb
   - 
   - 
   - 
