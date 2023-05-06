@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7572941628950717664
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7572941628950717695}
+  - component: {fileID: 7572941628950717694}
+  - component: {fileID: 7572941628950717665}
+  m_Layer: 0
+  m_Name: ImageTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7572941628950717695
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7572941628950717664}
+  m_LocalRotation: {x: 0.01106743, y: -0.9702245, z: 0.008382936, w: 0.24180943}
+  m_LocalPosition: {x: -534.65, y: -51.357, z: -101.93}
+  m_LocalScale: {x: 1.8331603, y: 1.4733716, z: 3.5362873}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 1.469, y: -166.504, z: -3.186}
+--- !u!65 &7572941628950717694
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7572941628950717664}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.8587117, y: 3.9030554, z: 4.566356}
+  m_Center: {x: 0.79572225, y: 0.4128913, z: 0.75605226}
+--- !u!114 &7572941628950717665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7572941628950717664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0ea7f32407e32a49bcfda7cddb716d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obje: {fileID: 1363860444773975143, guid: 8588af33d25c6c049aaca72d3e6bc449, type: 3}
+  destroy:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  player: {fileID: 0}
