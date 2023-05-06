@@ -10,17 +10,19 @@ using UnityEngine;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
-    using UnityEditor;
-    using System.Net;
+using UnityEditor;
+using System.Net;
 #endif
 
 public class FirstPersonController : MonoBehaviour
 {
     private Rigidbody rb;
 
+
+
     #region Camera Movement Variables
-[SerializeField] private LayerMask grabbableLayer;
-private GameObject grabbedObject;
+    [SerializeField] private LayerMask grabbableLayer;
+    private GameObject grabbedObject;
     public Camera playerCamera;
 
     public float fov = 60f;
@@ -152,12 +154,14 @@ private GameObject grabbedObject;
 
     void Start()
     {
-        if(lockCursor)
+
+
+        if (lockCursor)
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
 
-        if(crosshair)
+        if (crosshair)
         {
             crosshairObject.sprite = crosshairImage;
             crosshairObject.color = crosshairColor;
@@ -171,7 +175,7 @@ private GameObject grabbedObject;
 
         sprintBarCG = GetComponentInChildren<CanvasGroup>();
 
-        if(useSprintBar)
+        if (useSprintBar)
         {
             sprintBarBG.gameObject.SetActive(true);
             sprintBar.gameObject.SetActive(true);
@@ -185,7 +189,7 @@ private GameObject grabbedObject;
             sprintBarBG.rectTransform.sizeDelta = new Vector3(sprintBarWidth, sprintBarHeight, 0f);
             sprintBar.rectTransform.sizeDelta = new Vector3(sprintBarWidth - 2, sprintBarHeight - 2, 0f);
 
-            if(hideBarWhenFull)
+            if (hideBarWhenFull)
             {
                 sprintBarCG.alpha = 0;
             }
@@ -196,6 +200,7 @@ private GameObject grabbedObject;
             sprintBar.gameObject.SetActive(false);
         }
 
+
         #endregion
     }
 
@@ -203,38 +208,40 @@ private GameObject grabbedObject;
 
     private void Update()
     {
-    #region CROSSHAIR
-         if (Input.GetMouseButtonDown(0))
-    {
-        // Raycast to see if there is an object in front of the crosshair
-        RaycastHit hit;
-        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 10f, grabbableLayer))
+        #region CROSSHAIR
+        if (Input.GetMouseButtonDown(0))
         {
-            // Set the grabbed object and disable its physics
-            grabbedObject = hit.collider.gameObject;
-            grabbedObject.GetComponent<Rigidbody>().isKinematic = true;
+
+            // Raycast to see if there is an object in front of the crosshair
+            RaycastHit hit;
+            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 10f, grabbableLayer))
+            {
+                // Set the grabbed object and disable its physics
+                grabbedObject = hit.collider.gameObject;
+                grabbedObject.GetComponent<Rigidbody>().isKinematic = true;
+
+            }
         }
-    }
-    else if (Input.GetMouseButtonUp(0))
-    {
-        // Release the grabbed object and enable its physics
+        else if (Input.GetMouseButtonUp(0))
+        {
+            // Release the grabbed object and enable its physics
+            if (grabbedObject != null)
+            {
+                grabbedObject.GetComponent<Rigidbody>().isKinematic = false;
+                grabbedObject = null;
+            }
+        }
+
+        // Move the grabbed object along with the crosshair
         if (grabbedObject != null)
         {
-            grabbedObject.GetComponent<Rigidbody>().isKinematic = false;
-            grabbedObject = null;
+            grabbedObject.transform.position = crosshairObject.transform.position;
         }
-    }
-
-    // Move the grabbed object along with the crosshair
-    if (grabbedObject != null)
-    {
-        grabbedObject.transform.position = crosshairObject.transform.position;
-    }
-#endregion
+        #endregion
         #region Camera
 
         // Control camera movement
-        if(cameraCanMove)
+        if (cameraCanMove)
         {
             yaw = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * mouseSensitivity;
 
@@ -261,7 +268,7 @@ private GameObject grabbedObject;
         {
             // Changes isZoomed when key is pressed
             // Behavior for toogle zoom
-            if(Input.GetKeyDown(zoomKey) && !holdToZoom && !isSprinting)
+            if (Input.GetKeyDown(zoomKey) && !holdToZoom && !isSprinting)
             {
                 if (!isZoomed)
                 {
@@ -275,27 +282,31 @@ private GameObject grabbedObject;
 
             // Changes isZoomed when key is pressed
             // Behavior for hold to zoom
-            if(holdToZoom && !isSprinting)
+            if (holdToZoom && !isSprinting)
             {
-                if(Input.GetKeyDown(zoomKey))
+                if (Input.GetKeyDown(zoomKey))
                 {
                     isZoomed = true;
                 }
-                else if(Input.GetKeyUp(zoomKey))
+                else if (Input.GetKeyUp(zoomKey))
                 {
                     isZoomed = false;
                 }
             }
 
             // Lerps camera.fieldOfView to allow for a smooth transistion
-            if(isZoomed)
+            if (isZoomed)
             {
                 playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, zoomFOV, zoomStepTime * Time.deltaTime);
             }
-            else if(!isZoomed && !isSprinting)
+            else if (!isZoomed && !isSprinting)
             {
                 playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, fov, zoomStepTime * Time.deltaTime);
             }
+
+
+
+
         }
 
         #endregion
@@ -303,15 +314,17 @@ private GameObject grabbedObject;
 
         #region Sprint
 
-        if(enableSprint)
+        if (enableSprint)
         {
-            if(isSprinting)
+            if (isSprinting)
             {
+                AudioManager.instance.Play("Running");
+                AudioManager.instance.Stop("Walking");
                 isZoomed = false;
                 playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, sprintFOV, sprintFOVStepTime * Time.deltaTime);
 
                 // Drain sprint remaining while sprinting
-                if(!unlimitedSprint)
+                if (!unlimitedSprint)
                 {
                     sprintRemaining -= 1 * Time.deltaTime;
                     if (sprintRemaining <= 0)
@@ -325,11 +338,12 @@ private GameObject grabbedObject;
             {
                 // Regain sprint while not sprinting
                 sprintRemaining = Mathf.Clamp(sprintRemaining += 1 * Time.deltaTime, 0, sprintDuration);
+                AudioManager.instance.Stop("Running");
             }
 
             // Handles sprint cooldown 
             // When sprint remaining == 0 stops sprint ability until hitting cooldown
-            if(isSprintCooldown)
+            if (isSprintCooldown)
             {
                 sprintCooldown -= 1 * Time.deltaTime;
                 if (sprintCooldown <= 0)
@@ -343,7 +357,7 @@ private GameObject grabbedObject;
             }
 
             // Handles sprintBar 
-            if(useSprintBar && !unlimitedSprint)
+            if (useSprintBar && !unlimitedSprint)
             {
                 float sprintRemainingPercent = sprintRemaining / sprintDuration;
                 sprintBar.transform.localScale = new Vector3(sprintRemainingPercent, 1f, 1f);
@@ -355,7 +369,7 @@ private GameObject grabbedObject;
         #region Jump
 
         // Gets input and calls jump method
-        if(enableJump && Input.GetKeyDown(jumpKey) && isGrounded)
+        if (enableJump && Input.GetKeyDown(jumpKey) && isGrounded)
         {
             Jump();
         }
@@ -366,17 +380,17 @@ private GameObject grabbedObject;
 
         if (enableCrouch)
         {
-            if(Input.GetKeyDown(crouchKey) && !holdToCrouch)
+            if (Input.GetKeyDown(crouchKey) && !holdToCrouch)
             {
                 Crouch();
             }
-            
-            if(Input.GetKeyDown(crouchKey) && holdToCrouch)
+
+            if (Input.GetKeyDown(crouchKey) && holdToCrouch)
             {
                 isCrouched = false;
                 Crouch();
             }
-            else if(Input.GetKeyUp(crouchKey) && holdToCrouch)
+            else if (Input.GetKeyUp(crouchKey) && holdToCrouch)
             {
                 isCrouched = true;
                 Crouch();
@@ -387,7 +401,7 @@ private GameObject grabbedObject;
 
         CheckGround();
 
-        if(enableHeadBob)
+        if (enableHeadBob)
         {
             HeadBob();
         }
@@ -397,20 +411,30 @@ private GameObject grabbedObject;
     {
         #region Movement
 
+
+
         if (playerCanMove)
         {
             // Calculate how fast we should be moving
             Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
+
+
 
             // Checks if player is walking and isGrounded
             // Will allow head bob
             if (targetVelocity.x != 0 || targetVelocity.z != 0 && isGrounded)
             {
                 isWalking = true;
+                AudioManager.instance.Play("Walking");
+
             }
             else
             {
                 isWalking = false;
+                AudioManager.instance.Stop("Walking");
+
+
             }
 
             // All movement calculations shile sprint is active
@@ -443,6 +467,7 @@ private GameObject grabbedObject;
                 }
 
                 rb.AddForce(velocityChange, ForceMode.VelocityChange);
+
             }
             // All movement calculations while walking
             else
@@ -498,7 +523,7 @@ private GameObject grabbedObject;
         }
 
         // When crouched and using toggle system, will uncrouch for a jump
-        if(isCrouched && !holdToCrouch)
+        if (isCrouched && !holdToCrouch)
         {
             Crouch();
         }
@@ -508,7 +533,7 @@ private GameObject grabbedObject;
     {
         // Stands player up to full height
         // Brings walkSpeed back up to original speed
-        if(isCrouched)
+        if (isCrouched)
         {
             transform.localScale = new Vector3(originalScale.x, originalScale.y, originalScale.z);
             walkSpeed /= speedReduction;
@@ -528,10 +553,11 @@ private GameObject grabbedObject;
 
     private void HeadBob()
     {
-        if(isWalking)
+        if (isWalking)
         {
+
             // Calculates HeadBob speed during sprint
-            if(isSprinting)
+            if (isSprinting)
             {
                 timer += Time.deltaTime * (bobSpeed + sprintSpeed);
             }
@@ -561,11 +587,13 @@ private GameObject grabbedObject;
 
 // Custom Editor
 #if UNITY_EDITOR
-    [CustomEditor(typeof(FirstPersonController)), InitializeOnLoadAttribute]
-    public class FirstPersonControllerEditor : Editor
-    {
+[CustomEditor(typeof(FirstPersonController)), InitializeOnLoadAttribute]
+public class FirstPersonControllerEditor : Editor
+{
     FirstPersonController fpc;
     SerializedObject SerFPC;
+    [SerializeField]
+
 
     private void OnEnable()
     {
@@ -575,6 +603,7 @@ private GameObject grabbedObject;
 
     public override void OnInspectorGUI()
     {
+
         SerFPC.Update();
 
         EditorGUILayout.Space();
@@ -604,18 +633,18 @@ private GameObject grabbedObject;
         fpc.crosshair = EditorGUILayout.ToggleLeft(new GUIContent("Auto Crosshair", "Determines if the basic crosshair will be turned on, and sets is to the center of the screen."), fpc.crosshair);
 
         // Only displays crosshair options if crosshair is enabled
-        if(fpc.crosshair) 
-        { 
-            EditorGUI.indentLevel++; 
-            EditorGUILayout.BeginHorizontal(); 
-            EditorGUILayout.PrefixLabel(new GUIContent("Crosshair Image", "Sprite to use as the crosshair.")); 
+        if (fpc.crosshair)
+        {
+            EditorGUI.indentLevel++;
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.PrefixLabel(new GUIContent("Crosshair Image", "Sprite to use as the crosshair."));
             fpc.crosshairImage = (Sprite)EditorGUILayout.ObjectField(fpc.crosshairImage, typeof(Sprite), false);
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
             fpc.crosshairColor = EditorGUILayout.ColorField(new GUIContent("Crosshair Color", "Determines the color of the crosshair."), fpc.crosshairColor);
             EditorGUILayout.EndHorizontal();
-            EditorGUI.indentLevel--; 
+            EditorGUI.indentLevel--;
         }
 
         EditorGUILayout.Space();
@@ -673,7 +702,7 @@ private GameObject grabbedObject;
         fpc.useSprintBar = EditorGUILayout.ToggleLeft(new GUIContent("Use Sprint Bar", "Determines if the default sprint bar will appear on screen."), fpc.useSprintBar);
 
         // Only displays sprint bar options if sprint bar is enabled
-        if(fpc.useSprintBar)
+        if (fpc.useSprintBar)
         {
             EditorGUI.indentLevel++;
 
@@ -747,7 +776,7 @@ private GameObject grabbedObject;
         EditorGUILayout.Space();
 
         fpc.enableHeadBob = EditorGUILayout.ToggleLeft(new GUIContent("Enable Head Bob", "Determines if the camera will bob while the player is walking."), fpc.enableHeadBob);
-        
+
 
         GUI.enabled = fpc.enableHeadBob;
         fpc.joint = (Transform)EditorGUILayout.ObjectField(new GUIContent("Camera Joint", "Joint object position is moved while head bob is active."), fpc.joint, typeof(Transform), true);
@@ -758,7 +787,7 @@ private GameObject grabbedObject;
         #endregion
 
         //Sets any changes from the prefab
-        if(GUI.changed)
+        if (GUI.changed)
         {
             EditorUtility.SetDirty(fpc);
             Undo.RecordObject(fpc, "FPC Change");

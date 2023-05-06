@@ -40,6 +40,7 @@ public class GrabFromImage : MonoBehaviour
     {
         if (playerInsideCollider && Input.GetMouseButtonDown(0) && !objeCreated)
         {
+            AudioManager.instance.Play("Grab");
             Debug.Log("Mouse click");
             playerPos = player.transform.position + player.transform.forward * spawnDistance;
 
