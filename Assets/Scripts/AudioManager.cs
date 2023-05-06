@@ -55,6 +55,12 @@ public class AudioManager : MonoBehaviour
             s.source.Play();
 
         }
+        if (name == "Hold")
+        {
+            if (s.source.isPlaying) return;
+            s.source.Play();
+
+        }
         else
         {
             s.source.Play();

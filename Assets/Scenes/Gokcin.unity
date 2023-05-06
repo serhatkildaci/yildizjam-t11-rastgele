@@ -22624,7 +22624,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2513974655663753960, guid: 0610667a0ab068549b0f9574dbfc3509, type: 3}
       propertyPath: sounds.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2513974655663753960, guid: 0610667a0ab068549b0f9574dbfc3509, type: 3}
       propertyPath: sounds.Array.data[2].clip
@@ -22643,11 +22643,23 @@ PrefabInstance:
       value: Running
       objectReference: {fileID: 0}
     - target: {fileID: 2513974655663753960, guid: 0610667a0ab068549b0f9574dbfc3509, type: 3}
+      propertyPath: sounds.Array.data[4].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: b9dde205dee2cf9499f2a369b70946eb, type: 3}
+    - target: {fileID: 2513974655663753960, guid: 0610667a0ab068549b0f9574dbfc3509, type: 3}
+      propertyPath: sounds.Array.data[4].name
+      value: Hold
+      objectReference: {fileID: 0}
+    - target: {fileID: 2513974655663753960, guid: 0610667a0ab068549b0f9574dbfc3509, type: 3}
       propertyPath: sounds.Array.data[2].pitch
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2513974655663753960, guid: 0610667a0ab068549b0f9574dbfc3509, type: 3}
       propertyPath: sounds.Array.data[3].pitch
+      value: 1.57
+      objectReference: {fileID: 0}
+    - target: {fileID: 2513974655663753960, guid: 0610667a0ab068549b0f9574dbfc3509, type: 3}
+      propertyPath: sounds.Array.data[4].pitch
       value: 1.57
       objectReference: {fileID: 0}
     - target: {fileID: 2513974655663753960, guid: 0610667a0ab068549b0f9574dbfc3509, type: 3}
@@ -22661,6 +22673,10 @@ PrefabInstance:
     - target: {fileID: 2513974655663753960, guid: 0610667a0ab068549b0f9574dbfc3509, type: 3}
       propertyPath: sounds.Array.data[3].volume
       value: 0.384
+      objectReference: {fileID: 0}
+    - target: {fileID: 2513974655663753960, guid: 0610667a0ab068549b0f9574dbfc3509, type: 3}
+      propertyPath: sounds.Array.data[4].volume
+      value: 0.482
       objectReference: {fileID: 0}
     - target: {fileID: 2513974655663753961, guid: 0610667a0ab068549b0f9574dbfc3509, type: 3}
       propertyPath: m_RootOrder
