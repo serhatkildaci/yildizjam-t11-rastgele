@@ -12,7 +12,7 @@ public class LaserGoal : MonoBehaviour
     void Start()
     {
         doorInitialPosition = doorToBeOpened.transform.position;
-        InvokeRepeating("TriggerChange", 0, 0.2f);
+        InvokeRepeating("TriggerChange", 0, 2f);
     }
 
     void Update()
@@ -34,6 +34,12 @@ public class LaserGoal : MonoBehaviour
 
     void TriggerChange(){
         trigger = false;
+    }
+
+    void OnCollusionEnter(Collider collider){
+        if(collider.gameObject.tag == "LaserBeam"){
+            Debug.Log("a");
+        }
     }
 
 }

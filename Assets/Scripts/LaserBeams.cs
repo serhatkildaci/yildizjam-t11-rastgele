@@ -9,10 +9,13 @@ public class LaserBeams
     LineRenderer laser;
     List<Vector3> laserIndicies = new List<Vector3>();
     private GameObject laserGoal;
+    private bool isGoalReached = false;
+
     public LaserBeams(Vector3 pos, Vector3 dir, Material material){
         this.laser = new LineRenderer();
         this.laserObj = new GameObject();
         this.laserObj.name = "LaserBeam";
+        this.laserObj.tag = "LaserBeam";
         this.pos = pos;
         this.dir = dir;
 
@@ -26,9 +29,10 @@ public class LaserBeams
 
         CastRay(pos, dir, laser);
     }
+
     void CastRay(Vector3 pos, Vector3 dir, LineRenderer laser){
         laserIndicies.Add(pos);
-        
+
         Ray ray = new Ray(pos, dir);
         RaycastHit hit;
 
@@ -50,30 +54,30 @@ public class LaserBeams
             count++;
         }
     }
+
     void Checkhit(RaycastHit hitInfo, Vector3 direction, LineRenderer laser){
         if(hitInfo.collider.gameObject.tag == "Mirror"){
-        Vector3 pos = hitInfo.point;
-        Vector3 dir = Vector3.Reflect(direction, hitInfo.normal);
+            Vector3 pos = hitInfo.point;
+            Vector3 dir = Vector3.Reflect(direction, hitInfo.normal);
 
-        CastRay(pos, dir, laser);
-    }
-    else{
-        laserIndicies.Add(hitInfo.point);
-        UpdateLaser();
-    }
-    if(hitInfo.collider.gameObject.tag == "LaserGoal"){
-        if (laserGoal != hitInfo.collider.gameObject) {
-            laserGoal = hitInfo.collider.gameObject;
-            LaserGoal laserGoalScript = laserGoal.GetComponent<LaserGoal>();
-            laserGoalScript.trigger = true;
-            Debug.Log(laserGoalScript.trigger);
+            CastRay(pos, dir, laser);
         }
-        laserIndicies.Add(hitInfo.point);
-        UpdateLaser();
+        else if(hitInfo.collider.gameObject.tag == "LaserGoal"){
+            if (!isGoalReached) {
+                isGoalReached = true;
+                LaserGoal laserGoalScript = hitInfo.collider.gameObject.GetComponent<LaserGoal>();
+                laserGoalScript.trigger = true;
+            }
+            laserIndicies.Add(hitInfo.point);
+            UpdateLaser();
+        }
+        else {
+            laserIndicies.Add(hitInfo.point);
+            UpdateLaser();
+        }
     }
-    else {
-        laserIndicies.Add(hitInfo.point);
-        UpdateLaser();
-    }
+
+    public void Destroy(){
+        GameObject.Destroy(laserObj);
     }
 }
