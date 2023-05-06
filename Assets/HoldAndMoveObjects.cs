@@ -19,7 +19,7 @@ public class HoldAndMoveObjects : MonoBehaviour
             objectDistance = minObjectDistance;
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKey(KeyCode.E))
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -30,7 +30,7 @@ public class HoldAndMoveObjects : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButton(0) && heldObject != null)
+        if (Input.GetKey(KeyCode.E) && heldObject != null)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Vector3 newPosition = ray.origin + ray.direction * objectDistance + heldObjectOffset;

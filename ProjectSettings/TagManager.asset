@@ -3,12 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - LaserGoal
+  - Mirror
+  - Note
+  - Targetable
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - grabbableLayer
   - Water
   - UI
   - 
