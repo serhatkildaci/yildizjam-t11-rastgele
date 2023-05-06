@@ -8,6 +8,7 @@ public class LaserBeams
     GameObject laserObj;
     LineRenderer laser;
     List<Vector3> laserIndicies = new List<Vector3>();
+    private GameObject laserGoal;
     public LaserBeams(Vector3 pos, Vector3 dir, Material material){
         this.laser = new LineRenderer();
         this.laserObj = new GameObject();
@@ -51,19 +52,31 @@ public class LaserBeams
     }
     void Checkhit(RaycastHit hitInfo, Vector3 direction, LineRenderer laser){
         if(hitInfo.collider.gameObject.tag == "Mirror"){
-            Vector3 pos = hitInfo.point;
-            Vector3 dir = Vector3.Reflect(direction, hitInfo.normal);
+        Vector3 pos = hitInfo.point;
+        Vector3 dir = Vector3.Reflect(direction, hitInfo.normal);
 
-            CastRay(pos, dir, laser);
+        CastRay(pos, dir, laser);
+    }
+    else{
+        laserIndicies.Add(hitInfo.point);
+        UpdateLaser();
+    }
+    if(hitInfo.collider.gameObject.tag == "LaserGoal"){
+        if (laserGoal != hitInfo.collider.gameObject) {
+            laserGoal = hitInfo.collider.gameObject;
+            LaserGoal laserGoalScript = laserGoal.GetComponent<LaserGoal>();
+            laserGoalScript.trigger = true;
+            Debug.Log(laserGoalScript.trigger);
         }
-        else if(hitInfo.collider.gameObject.tag == "LaserGoal"){
-            Debug.Log("Hedefe ulaştın!");
-            laserIndicies.Add(hitInfo.point);
-            UpdateLaser();
-        }
-        else{
-            laserIndicies.Add(hitInfo.point);
-            UpdateLaser();
-        }
+        laserIndicies.Add(hitInfo.point);
+        UpdateLaser();
+    }
+    else {
+        laserIndicies.Add(hitInfo.point);
+        UpdateLaser();
+    }
+    }
+    public void Destroy(){
+        GameObject.Destroy(laserObj);
     }
 }

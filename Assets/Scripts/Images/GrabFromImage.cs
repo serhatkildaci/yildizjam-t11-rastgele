@@ -5,26 +5,51 @@ using UnityEngine;
 public class GrabFromImage : MonoBehaviour
 {
     public GameObject obje;
-    public GameObject[] destory;
+    public GameObject[] destroy;
+    public GameObject player;
+    Vector3 playerPos;
+    Vector3 playerDirection;
+    public float spawnDistance = 10;
+    private Camera mainCamera;
+    private bool objeCreated = false;
 
-
-
-    void OnTriggerEnter(Collider other)
+    private void Awake()
     {
-        if (other.gameObject.tag == "Player" && Input.GetKey(KeyCode.Mouse0))
-        {
-
-            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePosition.z = 0;
-            Instantiate(obje, mousePosition, Quaternion.identity);
-            for (int i = 0; i < destory.Length; i++)
-            {
-                Destroy(destory[i]);
-            }
-        }
-
+        mainCamera = Camera.main;
     }
 
+    private bool playerInsideCollider = false;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInsideCollider = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInsideCollider = false;
+        }
+    }
+
+    private void Update()
+    {
+        if (playerInsideCollider && Input.GetMouseButtonDown(0) && !objeCreated)
+        {
+            Debug.Log("Mouse click");
+            playerPos = player.transform.position + player.transform.forward * spawnDistance;
+
+            Instantiate(obje, playerPos, Quaternion.identity);
+            objeCreated = true;
+
+            for (int i = 0; i < destroy.Length; i++)
+            {
+                Destroy(destroy[i]);
+            }
+        }
+    }
 }
-
-
