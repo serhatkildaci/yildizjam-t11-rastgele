@@ -16,62 +16,65 @@ public class HoldAndMoveObjects : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
+    {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, maxReachDistance, objectLayer))
         {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, maxReachDistance, objectLayer))
+            AudioManager.instance.Play("Hold");
+            heldObject = hit.collider.gameObject;
+            heldObjectOffset = heldObject.transform.position - hit.point;
+            lastValidPosition = heldObject.transform.position;
+        }
+    }
+
+    if (Input.GetKey(KeyCode.E) && heldObject != null)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector3 newPosition = ray.origin + ray.direction * objectDistance + heldObjectOffset;
+        newPosition.y = Mathf.Max(newPosition.y, minY); // prevent object from moving below minY
+
+        // check for collisions and move the held object along the collision normal
+        bool canMove = true;
+        int layerMask = objectLayer | LayerMask.GetMask("Floor"); // add floor layer to the collision layer mask
+        RaycastHit[] hits = Physics.RaycastAll(heldObject.transform.position, newPosition - heldObject.transform.position, (newPosition - heldObject.transform.position).magnitude, layerMask);
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.gameObject != heldObject)
             {
-                AudioManager.instance.Play("Hold");
-                heldObject = hit.collider.gameObject;
-                heldObjectOffset = heldObject.transform.position - hit.point;
-                lastValidPosition = heldObject.transform.position;
+                Vector3 normal = hit.normal;
+                Vector3 direction = newPosition - heldObject.transform.position;
+                float distance = (newPosition - heldObject.transform.position).magnitude;
+                float objectExtent = heldObject.GetComponent<Renderer>().bounds.extents.magnitude;
+                float collisionDistance = (distance - objectExtent) + collisionResolution;
+                newPosition = hit.point + normal * collisionDistance + direction.normalized * collisionResolution;
+                canMove = false;
             }
         }
 
-        if (Input.GetKey(KeyCode.E) && heldObject != null)
+        float distanceToPlayer = Vector3.Distance(transform.position, newPosition);
+        if (distanceToPlayer <= maxReachDistance && canMove)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Vector3 newPosition = ray.origin + ray.direction * objectDistance + heldObjectOffset;
-            newPosition.y = Mathf.Max(newPosition.y, minY); // prevent object from moving below minY
-
-            // check for collisions and move the held object along the collision normal
-            bool canMove = true;
-            RaycastHit[] hits = Physics.RaycastAll(heldObject.transform.position, newPosition - heldObject.transform.position, (newPosition - heldObject.transform.position).magnitude, objectLayer);
-            foreach (RaycastHit hit in hits)
-            {
-                if (hit.collider.gameObject != heldObject)
-                {
-                    Vector3 normal = hit.normal;
-                    Vector3 direction = newPosition - heldObject.transform.position;
-                    float distance = (newPosition - heldObject.transform.position).magnitude;
-                    float objectExtent = heldObject.GetComponent<Renderer>().bounds.extents.magnitude;
-                    float collisionDistance = (distance - objectExtent) + collisionResolution;
-                    newPosition = hit.point + normal * collisionDistance + direction.normalized * collisionResolution;
-                    canMove = false;
-                }
-            }
-
-            float distanceToPlayer = Vector3.Distance(transform.position, newPosition);
-            if (distanceToPlayer <= maxReachDistance && canMove)
-            {
-                heldObject.transform.position = newPosition;
-                lastValidPosition = heldObject.transform.position;
-            }
+            heldObject.transform.position = newPosition;
+            lastValidPosition = heldObject.transform.position;
         }
+    }
 
-        if (Input.GetKeyUp(KeyCode.E))
-        {
-            heldObject.transform.position = lastValidPosition;
-            heldObject = null;
+    if (Input.GetKeyUp(KeyCode.E))
+    {
+        if (heldObject != null){
+                heldObject.transform.position = lastValidPosition;
+                heldObject = null;
         }
+    }
 
-        float rotateSpeed = 5.0f; // adjust as needed
-        float rotationAmount = Input.mouseScrollDelta.y * rotateSpeed;
+    float rotateSpeed = 5.0f; // adjust as needed
+    float rotationAmount = Input.mouseScrollDelta.y * rotateSpeed;
 
-        if (heldObject != null)
-        {
-            Vector3 currentRotation = heldObject.transform.rotation.eulerAngles;
-            heldObject.transform.rotation = Quaternion.Euler(0.0f, currentRotation.y + rotationAmount, 0.0f);
-        }
+    if (heldObject != null)
+    {
+        Vector3 currentRotation = heldObject.transform.rotation.eulerAngles;
+        heldObject.transform.rotation = Quaternion.Euler(0.0f, currentRotation.y + rotationAmount, 0.0f);
+    }
     }
 }
