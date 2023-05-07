@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -204,11 +205,24 @@ public class FirstPersonController : MonoBehaviour
 
         #endregion
     }
+   public void EnterExitControls()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape)){
+            Debug.Log("esc key pressed");
+        SceneManager.LoadScene("StartEkranı");
+        }
 
+        if(Input.GetKeyDown(KeyCode.R)){
+            Debug.Log("R key pressed");
+            SceneManager.LoadScene("Serhat");
+        }
+    }
     float camRotation;
 
     private void Update()
     {
+
+        
         #region CROSSHAIR
         if (Input.GetMouseButtonDown(0))
         {
@@ -551,7 +565,7 @@ public class FirstPersonController : MonoBehaviour
             isCrouched = true;
         }
     }
-
+     
     private void HeadBob()
     {
         if (isWalking)
