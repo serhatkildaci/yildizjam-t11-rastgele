@@ -627,6 +627,7 @@ MonoBehaviour:
     m_Bits: 1
   minY: 0
   minObjectDistance: 1
+  collisionResolution: 0.01
 --- !u!114 &557620197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -647,7 +648,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 63
   offsetFactor: 1
-  maxScale: 10
+  maxScale: 4
   pickUpDistance: 10
 --- !u!1 &757555943
 GameObject:
