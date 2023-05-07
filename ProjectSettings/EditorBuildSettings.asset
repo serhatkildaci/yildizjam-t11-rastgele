@@ -6,9 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: "Assets/startScreen/StartEkran\u0131.unity"
+    guid: e56974bf17b76a34499992005745308d
+  - enabled: 1
     path: Assets/Scenes/Serhat.unity
     guid: af2701098243cf048b482a2b6151a28b
   - enabled: 1
-    path: Assets/NewScene123.unity
-    guid: 50d8573818892164ea9dfcfd15ae78e4
+    path: Assets/SecondScene2.unity
+    guid: b471b011a423b0b40b7b2bfe4f0f9550
   m_configObjects: {}
