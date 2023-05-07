@@ -31,27 +31,30 @@ public class Superliminal : MonoBehaviour
 
     void HandleInput()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
+    {
+        if (target == null)
         {
-            if (target == null)
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.forward, out hit, pickUpDistance, targetMask))
             {
-                RaycastHit hit;
-                if (Physics.Raycast(transform.position, transform.forward, out hit, pickUpDistance, targetMask))
-                {
-                    target = hit.transform;
-                    target.GetComponent<Rigidbody>().isKinematic = true;
-                    originalDistance = Vector3.Distance(transform.position, target.position);
-                    originalScale = target.localScale.x;
-                    targetScale = target.localScale;
-                    AudioManager.instance.Play("Grab");
-                }
-            }
-            else
-            {
-                target.GetComponent<Rigidbody>().isKinematic = false;
-                target = null;
+                target = hit.transform;
+                target.GetComponent<Rigidbody>().isKinematic = true;
+                originalDistance = Vector3.Distance(transform.position, target.position);
+                originalScale = target.localScale.x;
+                targetScale = target.localScale;
+                AudioManager.instance.Play("Grab");
             }
         }
+    }
+    else if (Input.GetMouseButtonUp(0))
+    {
+        if (target != null)
+        {
+            target.GetComponent<Rigidbody>().isKinematic = false;
+            target = null;
+        }
+    }
     }
 
     void ResizeTarget()
