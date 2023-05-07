@@ -7,6 +7,6 @@ public class ObjectRotator : MonoBehaviour
     void Update()
     {
         // rotate the object around its center on the y-axis
-        transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.back, rotationSpeed * Time.deltaTime);
     }
 }
