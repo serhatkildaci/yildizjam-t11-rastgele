@@ -19,6 +19,7 @@ public class LaserGoal : MonoBehaviour
         if (trigger)
         {
             player.transform.position = new Vector3(teleportobject.transform.position.x, teleportobject.transform.position.y, teleportobject.transform.position.z); // teleport the player -10 units along the y-axis
+            Destroy(teleportobject);
         }
     }
 
