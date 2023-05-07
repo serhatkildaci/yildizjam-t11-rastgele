@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Superliminal : MonoBehaviour
 {
@@ -11,7 +10,7 @@ public class Superliminal : MonoBehaviour
     public LayerMask ignoreTargetMask;
     public float offsetFactor = 1;
 
-    public float maxScale = 10f; // new field to control max scale
+    public float maxScale = 3f; // new field to control max scale
 
     float originalDistance;
     float originalScale;
@@ -29,90 +28,64 @@ public class Superliminal : MonoBehaviour
         HandleInput();
         ResizeTarget();
     }
-   void EnterExitControls()
-{
-    if (Input.GetKeyDown(KeyCode.Escape))
-    {
-        Debug.Log("esc key pressed");
-        SceneManager.LoadScene("StartEkranı");
-    }
-
-    if (Input.GetKeyDown(KeyCode.R))
-    {
-        Debug.Log("R key pressed");
-        SceneManager.LoadScene("Serhat");
-    }
-}
 
     void HandleInput()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
+    {
+        if (target == null)
         {
-            if (target == null)
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.forward, out hit, pickUpDistance, targetMask))
             {
-
-                RaycastHit hit;
-                if (Physics.Raycast(transform.position, transform.forward, out hit, pickUpDistance, targetMask))
-                {
-                    target = hit.transform;
-                    target.GetComponent<Rigidbody>().isKinematic = true;
-                    originalDistance = Vector3.Distance(transform.position, target.position);
-                    originalScale = target.localScale.x;
-                    targetScale = target.localScale;
-                    AudioManager.instance.Play("Grab");
-                }
-            }
-            else
-            {
-                target.GetComponent<Rigidbody>().isKinematic = false;
-                target = null;
+                target = hit.transform;
+                target.GetComponent<Rigidbody>().isKinematic = true;
+                originalDistance = Vector3.Distance(transform.position, target.position);
+                originalScale = target.localScale.x;
+                targetScale = target.localScale;
+                AudioManager.instance.Play("Grab");
             }
         }
+    }
+    else if (Input.GetMouseButtonUp(0))
+    {
+        if (target != null)
+        {
+            target.GetComponent<Rigidbody>().isKinematic = false;
+            target = null;
+        }
+    }
     }
 
     void ResizeTarget()
     {
-    if (target == null)
-    {
-        return;
-    }
-
-    RaycastHit hit;
-    if(Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, ignoreTargetMask)){
-        Vector3 newPosition = hit.point - transform.forward * offsetFactor * (targetScale.x);
-
-        // check for any obstacles in a spherical shape around the target's position
-        float sphereRadius = target.localScale.x * 0.5f;
-        Collider[] colliders = Physics.OverlapSphere(newPosition, sphereRadius, targetMask);
-        bool isObstructed = false;
-        foreach (Collider collider in colliders) {
-            if (collider != target.GetComponent<Collider>()) {
-                isObstructed = true;
-                break;
-            }
+        if (target == null)
+        {
+            return;
         }
 
-        if (!isObstructed) {
-            // check if the target is intersecting with any walls
-            RaycastHit wallHit;
-            if (Physics.Raycast(newPosition, -transform.forward, out wallHit, pickUpDistance, targetMask)) {
-                newPosition = wallHit.point + transform.forward * sphereRadius;
-            }
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, ignoreTargetMask)){
+            target.position = hit.point - transform.forward * offsetFactor * (targetScale.x);
 
-            target.position = newPosition;
+            // check if the target object is intersecting with any other colliders
+            Collider[] colliders = Physics.OverlapBox(target.position, target.localScale / 2f, target.rotation, targetMask);
+            if (colliders.Length > 0)
+            {
+                // move the target object away from the colliding objects
+                foreach (Collider collider in colliders)
+                {
+                    Vector3 direction = (target.position - collider.ClosestPoint(target.position)).normalized;
+                    target.position += direction * (collider.bounds.extents.magnitude + target.localScale.x / 2f);
+                }
+            }
 
             float currentDistance = Vector3.Distance(transform.position, target.position);
             float s = currentDistance / originalDistance;
-
-            // limit scale to maxScale
-            s = Mathf.Min(s, maxScale / originalScale);
-            // limit scale to 1 (original size) or greater
-            s = Mathf.Max(s, 1f);
-
+            s = Mathf.Min(s, maxScale / originalScale); // limit scale to maxScale
             targetScale.x = targetScale.y = targetScale.z = s;
 
             target.transform.localScale = targetScale * originalScale;
         }
-    }
     }
 }
