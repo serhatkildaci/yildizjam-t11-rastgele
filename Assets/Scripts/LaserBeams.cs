@@ -16,6 +16,7 @@ public class LaserBeams
         this.laserObj = new GameObject();
         this.laserObj.name = "LaserBeam";
         this.laserObj.tag = "LaserBeam";
+        this.laserObj.layer = LayerMask.NameToLayer("Default"); // Set the layer to default
         this.pos = pos;
         this.dir = dir;
 
@@ -36,7 +37,9 @@ public class LaserBeams
         Ray ray = new Ray(pos, dir);
         RaycastHit hit;
 
-        if(Physics.Raycast(ray, out hit, 30, 1)){
+        int layerMask = (1 << LayerMask.NameToLayer("Default")) | (1 << LayerMask.NameToLayer("Laser")); // Add the layer mask that includes the layer of the "LaserGoal" game object
+
+        if(Physics.Raycast(ray, out hit, 30, layerMask)){
             Checkhit(hit, dir, laser);
         }
         else{

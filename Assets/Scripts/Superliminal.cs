@@ -15,6 +15,7 @@ public class Superliminal : MonoBehaviour
     float originalDistance;
     float originalScale;
     Vector3 targetScale;
+    [SerializeField, Range(5f, 20f)] float pickUpDistance = 10f;
 
     void Start()
     {
@@ -36,7 +37,7 @@ public class Superliminal : MonoBehaviour
             {
 
                 RaycastHit hit;
-                if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, targetMask))
+                if (Physics.Raycast(transform.position, transform.forward, out hit, pickUpDistance, targetMask))
                 {
                     target = hit.transform;
                     target.GetComponent<Rigidbody>().isKinematic = true;
@@ -56,21 +57,47 @@ public class Superliminal : MonoBehaviour
 
     void ResizeTarget()
     {
-        if (target == null)
-        {
-            return;
+    if (target == null)
+    {
+        return;
+    }
+
+    RaycastHit hit;
+    if(Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, ignoreTargetMask)){
+        Vector3 newPosition = hit.point - transform.forward * offsetFactor * (targetScale.x);
+
+        // check for any obstacles in a spherical shape around the target's position
+        float sphereRadius = target.localScale.x * 0.5f;
+        Collider[] colliders = Physics.OverlapSphere(newPosition, sphereRadius, targetMask);
+        bool isObstructed = false;
+        foreach (Collider collider in colliders) {
+            if (collider != target.GetComponent<Collider>()) {
+                isObstructed = true;
+                break;
+            }
         }
 
-        RaycastHit hit;
-        if(Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity, ignoreTargetMask)){
-            target.position = hit.point - transform.forward * offsetFactor * (targetScale.x);
+        if (!isObstructed) {
+            // check if the target is intersecting with any walls
+            RaycastHit wallHit;
+            if (Physics.Raycast(newPosition, -transform.forward, out wallHit, pickUpDistance, targetMask)) {
+                newPosition = wallHit.point + transform.forward * sphereRadius;
+            }
+
+            target.position = newPosition;
 
             float currentDistance = Vector3.Distance(transform.position, target.position);
             float s = currentDistance / originalDistance;
-            s = Mathf.Min(s, maxScale / originalScale); // limit scale to maxScale
+
+            // limit scale to maxScale
+            s = Mathf.Min(s, maxScale / originalScale);
+            // limit scale to 1 (original size) or greater
+            s = Mathf.Max(s, 1f);
+
             targetScale.x = targetScale.y = targetScale.z = s;
 
             target.transform.localScale = targetScale * originalScale;
         }
+    }
     }
 }
