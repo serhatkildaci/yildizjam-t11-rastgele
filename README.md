@@ -1,7 +1,7 @@
 # Yıldız.Technical.University.Game.Jam
 404 The Game
 
-Group T-11.Rastgele
+Group T-11.Rastgele:
 Talip Serhat Kıldacı,
 Damla Eroğlu,
 Osman Gökçin,
