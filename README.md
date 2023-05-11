@@ -27,7 +27,7 @@ Yusuf Çetin- https://www.linkedin.com/in/yu5ufcetin/
 Metin Batuhan Özücan -https://www.linkedin.com/in/metin-batuhan-ozucan
 
 ## Link:
-https://boebyn.itch.io/academiareborn
+https://hayalimelodi.itch.io/t11-rastgele404
 
 ## Kullandığımız Assetler:
 [Modular First Person Controller](https://assetstore.unity.com/packages/3d/characters/modular-first-person-controller-189884/)
